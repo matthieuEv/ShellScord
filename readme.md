@@ -1,5 +1,7 @@
 ![Static Badge](https://img.shields.io/badge/Please_star_this-7289DA?style=for-the-badge)
-
+<div align="center">
+	<img src="src\images\logo.png" width="100">
+</div>
 # ShellScord
 
 ShellScord is a Discord Client in your shell written in python powered by [Textual](https://github.com/Textualize/textual).
@@ -28,6 +30,31 @@ Download the zip file from the latest release and extract it, or simply clone th
 > [!NOTE]  
 > I only tested this project on Windows for now, but it should work on Linux and MacOS as well. If you encounter any issues, please let me know by creating an issue.
 
+Using a Virtual Environment is recommended.
+
+```bash
+python -m venv venv
+
+venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+## Usage
+
+```bash
+python .\src\main.py
+```
+
+To run textual in `dev mode`, you can use the following command:
+
+```bash
+# in a different terminal, to see the logs
+textual console -x SYSTEM -x DEBUG -x EVENT
+
+textual run --dev .\src\main.py
+``` 
+
 ## How to login
 
 1- Login to Discord on any web browser
@@ -45,7 +72,7 @@ local storage)
 
 6- In the filter tab, search "token"
 
-![image](src\images\token.png)
+<img src="src\images\token.png">
 
 7- create a `.env` file in the root directory of the project and add the token:
     
@@ -55,7 +82,7 @@ TOKEN=your_token_here
 
 # Screenshots
 
-![image](src\images\screenshot.png)
+<img src="src\images\screenshot.png">
 
 # Thanks:
 
