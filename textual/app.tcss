@@ -1,0 +1,107 @@
+$color1: #7289da;
+$color2: #424549;
+$color3: #36393e;
+$color4: #282b30;
+$color5: #1e2124;
+
+
+Grid {
+    layout: grid;
+    grid-size: 3 2;
+    grid-rows: 85% 15%;
+    grid-columns: 15 30 65;
+
+    width: 100%;
+    height: 100%;
+    align: center middle;
+}
+
+Sidebar {
+    background: $color5;
+    height: 100%;
+    scrollbar-size: 0 0;
+    padding: 0 1;
+    row-span: 2;
+}
+
+#SidebarRule{
+    width: 11;
+    height: 1;
+    padding: 0;
+    margin-top: 1;
+}
+
+.serverIcon{
+    color: #fff;
+    background: #f00;
+    margin: 1 1 0 1;
+    padding: 0;
+    min-width: 0;
+    min-height: 0;
+    height: 5;
+    width: 11;
+    align: center middle;
+    border: hidden;
+}
+
+#blue{
+    background: $color1;
+}
+
+Tooltip {
+    padding: 0 1;
+    color: #fff;
+    background: #0f0;
+}
+
+
+Presenter {
+    background: $color2;
+    height: 100%;
+    scrollbar-size: 0 0;
+    padding: 0 1;
+}
+
+ChannelLabel {
+    background: $color3;
+    color: #fff;
+    padding: 1 1 0 1;
+    width: 28;
+    height: 3;
+    align: center middle;
+    margin-top: 1;
+    border: hidden;
+}
+.paddingStatic {
+    margin: 1 0 0 0;
+}
+
+UserLabel{
+    background: $color4;
+    height: 10;
+    padding: 1 1 0 1;
+}
+
+Chat {
+    background: $color3;
+    height: 100%;
+    min-width: 100;
+    padding: 1;
+    scrollbar-size: 0 0;
+}
+
+Message{
+    background: $color4;
+    padding: 1;
+    margin-bottom: 1;
+    border: hidden;
+}
+
+TextInput{
+    background: $color4;
+    height: 70%;
+    padding: 1 0 0 1;
+    margin: 1 0 0 2;
+    width: 100;
+    border: hidden;
+}
