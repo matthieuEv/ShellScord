@@ -53,34 +53,6 @@ class ChannelLabel(Button):
                     Message(message)
                 )
 
-async def loadChannel(type, selfApp, id=0):
-    presenter = selfApp.query_one("Presenter", Presenter)
-    presenter.remove_children('*')
-
-    if type == "friends":
-        log("Loading friends")
-        friends = await discordAPI.getFriends()
-        
-        for friend in reversed(friends):
-            label = friend["recipients"][0].get("username")
-            discordID = friend["id"]
-            presenter.mount(
-                ChannelLabel(label, discordID, -1, selfApp)
-            )
-        presenter.mount(Static("", classes="paddingStatic"))
-    elif type == "server":
-        log("Loading server")
-        channels = await discordAPI.getServerChannels(id)
-        for channel in reversed(channels):
-            label = channel.get("name")
-            discordID = channel.get("id")
-            type = channel.get("type")
-            if type != 4: # 4 = catégorie
-                presenter.mount(
-                    ChannelLabel(label, discordID, type, selfApp)
-                )
-        presenter.mount(Static("", classes="paddingStatic"))
-
 async def loadMessages(channel_id):
     messages = await discordAPI.loadMessages(channel_id)
     data = []
