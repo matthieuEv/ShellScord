@@ -41,9 +41,11 @@ class WebSocketClient:
             asyncio.create_task(self.heartbeat(websocket))
 
         log.info(f"Type: {data.get("t")}")
-        if data.get("t") == "MESSAGE_CREATE":
+        if data.get("t") == "MESSAGE_CREATE" or data.get("t") == "MESSAGE_DELETE":
             log.info(f"Received message: {data}")
-            await self.message_handler(data["d"])
+            await self.message_handler(data)
+
+        
 
     async def heartbeat(self, websocket: WebSocketClientProtocol):
         while True:

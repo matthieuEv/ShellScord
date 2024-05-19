@@ -56,10 +56,13 @@ class ChannelLabel(Button):
 async def loadMessages(channel_id):
     messages = await discordAPI.loadMessages(channel_id)
     data = []
-    for message in reversed(messages):  # Inverser l'ordre des messages
-        data.append({
-            "username": message["author"].get("username"),
-            "content": message["content"],
-            "timestamp": message["timestamp"]
-        })
-    return data
+    if messages != None:
+        for message in reversed(messages):  # Inverser l'ordre des messages
+            data.append({
+                "username": message["author"].get("username"),
+                "content": message["content"],
+                "timestamp": message["timestamp"],
+                "id": "id"+str(message["id"])
+            })
+        return data
+    return []

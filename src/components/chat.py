@@ -30,7 +30,7 @@ class TextInput(Input):
 
 class Message(Static):
     def __init__(self, data: str, **kwargs):
-        super().__init__(**kwargs,classes="Message")
+        super().__init__(**kwargs,classes="Message",id=str(data["id"]))
         self.data = data
 
     def compose(self):

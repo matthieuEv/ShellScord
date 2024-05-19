@@ -62,10 +62,12 @@ async def loadChannel(type, selfApp, id=0):
     elif type == "server":
         log("Loading server")
         channels = await discordAPI.getServerChannels(id)
+        log("Channels", channels)
         for channel in reversed(channels):
             label = channel.get("name")
             discordID = channel.get("id")
             type = channel.get("type")
+            # if channel["permission_overwrites"] == []: # si l'autorisation est bonne
             if type != 4: # 4 = catégorie
                 presenter.mount(
                     ChannelLabel(label, discordID, type, selfApp)

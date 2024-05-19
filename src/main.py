@@ -41,12 +41,18 @@ class Discord(App):
         chat = self.query_one("Chat", Chat)
         currentId = self.query_one("TextInput", TextInput).getDiscordID()
         log("currentId", currentId)
-        if message["channel_id"] == currentId:
+        log("message", message)
+        if message["d"]["channel_id"] == currentId and message["t"] == "MESSAGE_CREATE":
             chat.append_message({
-                "username": message["author"]["username"],
-                "content": message["content"],
-                "timestamp": message["timestamp"]
+                "username": message["d"]["author"]["username"],
+                "content": message["d"]["content"],
+                "timestamp": message["d"]["timestamp"],
+                "id": "id"+str(message["d"]["id"])
             })
+        if message["t"] == "MESSAGE_DELETE":
+            removeId = "id"+str(message["d"]["id"])
+            log("delete", removeId)
+            chat.remove_children("#"+removeId)
 
 async def getUserInfo(self):
     """Load my user info from Discord.
