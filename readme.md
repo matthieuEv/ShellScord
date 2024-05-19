@@ -2,6 +2,7 @@
 <div align="center">
 	<img src="src\images\logo.png" width="100">
 </div>
+
 # ShellScord
 
 ShellScord is a Discord Client in your shell written in python powered by [Textual](https://github.com/Textualize/textual).
