@@ -1,5 +1,5 @@
-from textual.widgets import Static, Header, Button, Input, Rule
-from textual.containers import Grid, VerticalScroll
+from textual.widgets import Static, Input
+from textual.containers import VerticalScroll
 from textual import log
 from api import DiscordAPI
 
@@ -8,6 +8,9 @@ discordAPI = DiscordAPI()
 class Chat(VerticalScroll):
     def compose(self):
         yield Static("")
+
+    def append_message(self, message):
+        self.mount(Message(message))
 
 class TextInput(Input):
     def __init__(self, **kwargs):
@@ -22,9 +25,12 @@ class TextInput(Input):
     def setDiscordID(self, discordID):
         self.currentDiscordID = discordID
 
+    def getDiscordID(self):
+        return self.currentDiscordID
+
 class Message(Static):
     def __init__(self, data: str, **kwargs):
-        super().__init__(**kwargs,classes="Message")
+        super().__init__(**kwargs,classes="Message",id=str(data["id"]))
         self.data = data
 
     def compose(self):

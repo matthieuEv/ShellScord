@@ -2,7 +2,9 @@ from textual.widgets import Static, Header, Button, Input, Rule
 from textual.containers import Grid, VerticalScroll
 from textual import log
 
-from components.presenter import loadChannel
+from components.presenter import Presenter, ChannelLabel
+
+from api import DiscordAPI
 
 currentServerId = 0
 
@@ -12,8 +14,6 @@ class Sidebar(VerticalScroll):
     def __init__(self,selfApp,**kwargs):
         super().__init__(**kwargs)
         self.selfApp = selfApp
-        log(">selfApp", selfApp)
-
     def compose(self):
 
         yield ButtonSidebar({
@@ -30,7 +30,6 @@ class ButtonSidebar(Button):
         self.tooltip = data["tooltip"]
         self.idServ = data["id"]
         self.selfApp = selfApp
-        log(">> selfApp", self.selfApp)
 
     def on_mount(self):
         self.tooltip = self.tooltip
@@ -43,3 +42,34 @@ class ButtonSidebar(Button):
                 await loadChannel("friends", self.selfApp ,self.idServ)
             else:
                 await loadChannel("server", self.selfApp ,self.idServ)
+
+async def loadChannel(type, selfApp, id=0):
+    presenter = selfApp.query_one("Presenter", Presenter)
+    presenter.remove_children('*')
+    discordAPI = DiscordAPI()
+
+    if type == "friends":
+        log("Loading friends")
+        friends = await discordAPI.getFriends()
+        
+        for friend in reversed(friends):
+            label = friend["recipients"][0].get("username")
+            discordID = friend["id"]
+            presenter.mount(
+                ChannelLabel(label, discordID, -1, selfApp)
+            )
+        presenter.mount(Static("", classes="paddingStatic"))
+    elif type == "server":
+        log("Loading server")
+        channels = await discordAPI.getServerChannels(id)
+        log("Channels", channels)
+        for channel in reversed(channels):
+            label = channel.get("name")
+            discordID = channel.get("id")
+            type = channel.get("type")
+            # if channel["permission_overwrites"] == []: # si l'autorisation est bonne
+            if type != 4: # 4 = catégorie
+                presenter.mount(
+                    ChannelLabel(label, discordID, type, selfApp)
+                )
+        presenter.mount(Static("", classes="paddingStatic"))

@@ -2,6 +2,7 @@ import asyncio
 import aiohttp
 import os
 from dotenv import load_dotenv
+from textual import log
 
 class DiscordAPI:
     def __init__(self):
@@ -43,15 +44,15 @@ class DiscordAPI:
                 else:
                     print("Message envoyé avec succès.")
 
-    async def loadMessages(self, channel_id):
+    async def loadMessages(self, channel_id, limit=20):
         headers = {"authorization": f"{self.token}"}
         async with aiohttp.ClientSession() as session:
-            async with session.get(f"https://discord.com/api/v9/channels/{channel_id}/messages", headers=headers) as response:
+            async with session.get(f"https://discord.com/api/v9/channels/{channel_id}/messages?limit={limit}", headers=headers) as response:
                 if response.status == 200:
                     messages_data = await response.json()
                     return messages_data
                 else:
-                    print("Erreur lors de la récupération des messages.")
+                    return 403
 
     async def getMeInfo(self):
         headers = {"authorization": f"{self.token}"}
@@ -62,7 +63,6 @@ class DiscordAPI:
                     return messages_data
                 else:
                     print("Erreur lors de la récupération des messages.")
-
 
     async def getServerIcon(self, server_id, server_icon):
         icon_url = f"https://cdn.discordapp.com/icons/{server_id}/{server_icon}.png"
@@ -78,10 +78,26 @@ class DiscordAPI:
     
     async def getServerChannels(self, server_id):
         headers = {"authorization": f"{self.token}"}
+        channels_data = []
         async with aiohttp.ClientSession() as session:
             async with session.get(f"https://discord.com/api/v9/guilds/{server_id}/channels", headers=headers) as response:
                 if response.status == 200:
-                    channels_data = await response.json()
-                    return channels_data
-                else:
-                    print("Erreur lors de la récupération des salons.")
+                    channel_data_list = await response.json()
+                    for channel in channel_data_list:
+                        channel_id = channel["id"]
+                        messages = await self.loadMessages(channel_id, limit=1)
+                        if messages == 403:
+                            continue
+                        else:
+                            channels_data.append(channel)
+
+        return channels_data
+
+
+async def main():
+    discordAPI = DiscordAPI()
+    data = await discordAPI.getServerChannels(818528610779660329)
+    print(data)
+
+if __name__ == "__main__":
+    asyncio.run(main())
